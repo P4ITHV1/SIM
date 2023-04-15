@@ -1,0 +1,55 @@
+import rospy
+from turtlesim.msg import Pose
+from geometry_msgs.msg import Twist
+from math import radians
+import time
+
+rospy.init_node('rectangle')
+
+# create a publisher to control the turtle's movement
+pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+
+# set the rate at which to publish turtle's movements
+rate = rospy.Rate(10)
+
+# create a subscriber to get the turtle's current position
+def pose_callback(data):
+    pose_callback.x = data.x
+    pose_callback.y = data.y
+    pose_callback.theta = data.theta
+
+rospy.Subscriber('/turtle1/pose', Pose, pose_callback)
+
+# wait for the subscriber to get the first message
+while not hasattr(pose_callback, 'x'):
+    time.sleep(0.1)
+
+# move the turtle in a rectangle
+for i in range(2):
+    # move forward
+    move_cmd = Twist()
+    move_cmd.linear.x = 3
+    pub.publish(move_cmd)
+    rospy.sleep(2)
+
+    # turn
+    move_cmd = Twist()
+    move_cmd.angular.z = radians(90)
+    pub.publish(move_cmd)
+    rospy.sleep(2)
+
+    # move forward
+    move_cmd = Twist()
+    move_cmd.linear.x = 1
+    pub.publish(move_cmd)
+    rospy.sleep(2)
+
+    # turn
+    move_cmd = Twist()
+    move_cmd.angular.z = radians(90)
+    pub.publish(move_cmd)
+    rospy.sleep(2)
+
+# stop the turtle
+move_cmd = Twist()
+pub.publish(move_cmd)

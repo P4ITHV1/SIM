@@ -1,0 +1,51 @@
+1. Creating a catkin workspace
+
+#we first create a directory
+
+mkdir catkin_ws
+Cd catkin_ws/
+mkdir src
+catkin_make
+ls
+
+#we will have two folders named devel and build
+#inside src we will have a CMakeList created by catkin
+
+#we now go into the bashrc file, from devel
+nano ~/.bashrc
+source ~/catkin_ws/devel/setup.bash
+#save and exit
+
+#we now create a ros package
+cd catkin_ws/src/
+catkin_create_pkg my_robot_tutorials roscpp rospy std_msgs
+cd my_robot_tutorials/
+ls
+#inside src we will have CMakeLists.txt and Package.xml
+
+#now navigate to your catkin_ws and into your package that is my_robot_tutorials
+mkdir scripts
+
+#go into this folder
+touch my_first_node.py
+chmod +x my_first_node.py
+nano my_first_node.py
+
+#now type this code into the python for creating a node
+#1/usr/bin/env python3
+Import rospy
+If __name__=='__main__':
+	rospy.init_node('my_first_python_node')
+	rospy.loginfo("this node has been started")
+	rate = rospy.Rate(10)
+	while not rospy.is_shutdown():
+		rospy.loginfo("hello")
+		rate.sleep()
+
+#now open a new terminal and run roscore
+#now run the python file : python3 my_first_node.py
+
+We can also run rqt_graph for getting the graph
+
+
+ 

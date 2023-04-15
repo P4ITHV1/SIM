@@ -1,0 +1,80 @@
+#creating custom messages
+
+Creating a new package separately for Message Definition
+catkin_create_pkg my_robot_msgs roscpp rospy std_msgs
+
+Remove include and src folder
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs$ rm -rf include/
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs$ rm -rf src/
+
+
+
+Open package.xml
+<build_depend>message_generation</build_generation>
+<exec_depend>message_runtime</exec_depend>
+
+
+
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs$ nano CMakeLists.txt
+Adding 'message_generation' in the find_package(catkin REQUIRED COMPONENTS) function
+
+
+
+Uncomment
+generate_messages(
+	DEPENDENCIES
+	std_msgs
+)
+
+
+In the catkin_package function
+Uncomment
+CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+
+
+
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs$ mkdir msg
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs$ cd msg
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_msgs/msg$ touch HardwareStatus.msg
+Nano HardwareStatus.msg
+
+int64 temperature
+bool are_motors_up
+string debug_message
+
+
+
+
+In the CMakeLists.txt, uncomment the following lines
+
+"
+add_message_files(
+	FILES
+	Message1.msg
+	Message2.msg
+)
+"
+
+"
+add_message_files(
+	FILES
+	HardwareStatus.msg
+)
+"
+
+
+lab22@205A-scope--36:~/catkin_ws/src/my_robot_tutorials$ nano package.xml
+Open package.xml in my_robot_tutorials
+Add the following line under <exec_depend>std_msgs</exec_depend>
+<depend>my_robot_msgs</depend>
+
+
+
+Add my_robot_msgs in CMakeLists.txt
+find_package(catkin REQUIRED COMPONENTS
+	roscpp
+	rospy
+	std_msgs
+	my_robot_msgs
+)
+

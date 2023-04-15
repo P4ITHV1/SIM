@@ -1,0 +1,38 @@
+#server
+Import rospy
+From std_srvs.srv import Trigger, TriggerResponse
+
+Def handle_append_strings(req):
+	String1 = “Prithviraj”
+	String2 = “Guntha”
+	response = TriggerResponse()
+	response.success = True
+	response.message = string1 + “ “ + string2
+	return response
+
+if __name__ == “__main__”:
+	rospy.init_node(“append_strings_server”)
+	rospy.loginfo(“strings Append Server Node is Created”)
+	service = rospy.Service(“append_strings”,Trigger, handle_append_strings)
+	rospy.spin()
+
+
+#client
+import rospy
+import sys
+from std_srvs.srv import Trigger, TriggerRequest
+
+def append_strings_client(string1,string2):
+	rospy.wait_for_service(“append_strings”)
+	try:
+		append_strings = rospy.ServiceProxy(“append_strings”,Trigger)
+		response = append_strings(TriggerRequest())
+		return string1+ “ “ + string2
+	except rospy.ServiceException as e:
+		print(“Service call failed: %s”%e)
+
+if __name__ == “__main__”:
+	string1 = sys.argv[1]
+	string2 = sys.argv[2]
+	result = append_strings_client(string1,string2)
+	print(result)

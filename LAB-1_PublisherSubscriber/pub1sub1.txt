@@ -1,0 +1,29 @@
+#publisher
+# /usr /bin/env python3
+import rospy
+from std msgs.msg import String 
+if __name__ == ‘__main__’:
+	rospy. init node('publisher.node')
+	pub = rospy.Publisher(" /robot_publisher_node",String, queue_size=10)
+	rate = rospy. Rate(2)
+	while not rospy.is_ shutdown():
+		msg = String()
+		msg.data = "Hi i an publtshing" 
+		pub.publish(msg)
+		rate.sleep()
+	rospy.loginfo("Publisher Node stopped")
+
+
+#subscriber
+#!/usr/bin/env python3
+import rospy
+from std_msgs.msg import String
+def callback_receive_radio_data(msg):
+        rospy.loginfo("Message received:")
+        rospy.loginfo(msg)
+
+
+if __name__ == '__main__':
+        rospy.init_node('subscriber')
+        sub = rospy.Subscriber("/robot_publisher_node", String, callback_receive_radio_data)
+        rospy.spin()
